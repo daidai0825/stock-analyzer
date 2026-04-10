@@ -41,9 +41,9 @@ export function LoginPage() {
       <div className="w-full max-w-md rounded-xl bg-gray-800 p-8 shadow-2xl">
         {/* Header */}
         <div className="mb-8 text-center">
-          <h1 className="text-2xl font-bold text-white">Stock Analyzer</h1>
+          <h1 className="text-2xl font-bold text-white">股票分析</h1>
           <p className="mt-1 text-sm text-gray-400">
-            {mode === 'login' ? 'Sign in to your account' : 'Create a new account'}
+            {mode === 'login' ? '登入你的帳號' : '建立新帳號'}
           </p>
         </div>
 
@@ -58,7 +58,7 @@ export function LoginPage() {
                 : 'text-gray-400 hover:bg-gray-700'
             }`}
           >
-            Sign In
+            登入
           </button>
           <button
             type="button"
@@ -69,7 +69,7 @@ export function LoginPage() {
                 : 'text-gray-400 hover:bg-gray-700'
             }`}
           >
-            Register
+            註冊
           </button>
         </div>
 
@@ -78,7 +78,7 @@ export function LoginPage() {
           {mode === 'register' && (
             <div>
               <label className="mb-1 block text-sm font-medium text-gray-300" htmlFor="email">
-                Email
+                電子郵件
               </label>
               <input
                 id="email"
@@ -94,7 +94,7 @@ export function LoginPage() {
 
           <div>
             <label className="mb-1 block text-sm font-medium text-gray-300" htmlFor="username">
-              {mode === 'login' ? 'Username or Email' : 'Username'}
+              {mode === 'login' ? '使用者名稱或電子郵件' : '使用者名稱'}
             </label>
             <input
               id="username"
@@ -102,14 +102,14 @@ export function LoginPage() {
               required
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder={mode === 'login' ? 'username or email' : 'username'}
+              placeholder={mode === 'login' ? '使用者名稱或電子郵件' : '使用者名稱'}
               className="w-full rounded-md bg-gray-700 px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           <div>
             <label className="mb-1 block text-sm font-medium text-gray-300" htmlFor="password">
-              Password
+              密碼
             </label>
             <input
               id="password"
@@ -118,7 +118,7 @@ export function LoginPage() {
               minLength={8}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="minimum 8 characters"
+              placeholder="至少 8 個字元"
               className="w-full rounded-md bg-gray-700 px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
@@ -134,7 +134,7 @@ export function LoginPage() {
             disabled={loading}
             className="mt-2 w-full rounded-md bg-blue-600 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? 'Please wait...' : mode === 'login' ? 'Sign In' : 'Create Account'}
+            {loading ? '請稍候...' : mode === 'login' ? '登入' : '建立帳號'}
           </button>
         </form>
       </div>
@@ -157,5 +157,5 @@ function extractErrorMessage(err: unknown): string {
       }
     }
   }
-  return 'An unexpected error occurred. Please try again.';
+  return '發生未預期的錯誤，請重試。';
 }

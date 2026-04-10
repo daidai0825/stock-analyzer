@@ -60,14 +60,14 @@ function CustomTooltip({ active, payload }: TooltipProps) {
   return (
     <div className="rounded-lg bg-gray-900 border border-gray-700 px-3 py-2 text-xs text-white shadow-lg">
       <p className="font-semibold mb-1">{row.date}</p>
-      <p>Close: <span className="text-blue-300">${row.close.toFixed(2)}</span></p>
+      <p>收盤：<span className="text-blue-300">${row.close.toFixed(2)}</span></p>
       {row.sma20 != null && (
-        <p>SMA20: <span className="text-orange-300">${row.sma20.toFixed(2)}</span></p>
+        <p>SMA20：<span className="text-orange-300">${row.sma20.toFixed(2)}</span></p>
       )}
       {row.sma50 != null && (
-        <p>SMA50: <span className="text-purple-300">${row.sma50.toFixed(2)}</span></p>
+        <p>SMA50：<span className="text-purple-300">${row.sma50.toFixed(2)}</span></p>
       )}
-      <p>Volume: <span className="text-gray-300">{formatVolume(row.volume)}</span></p>
+      <p>成交量：<span className="text-gray-300">{formatVolume(row.volume)}</span></p>
     </div>
   );
 }
@@ -101,7 +101,7 @@ export function PriceChart({
         className="flex items-center justify-center text-gray-400 text-sm"
         style={{ height }}
       >
-        No data available
+        無資料可顯示
       </div>
     );
   }

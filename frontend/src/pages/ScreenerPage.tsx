@@ -28,7 +28,7 @@ export function ScreenerPage() {
       });
       setResults(data);
     } catch {
-      setError('Screener failed. Please check your conditions and try again.');
+      setError('篩選失敗，請檢查條件後重試。');
       setResults(null);
     } finally {
       setIsLoading(false);
@@ -40,15 +40,15 @@ export function ScreenerPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Stock Screener</h1>
-        <p className="text-sm text-gray-500 mt-1">Filter stocks using technical and fundamental criteria</p>
+        <h1 className="text-2xl font-bold text-gray-900">股票篩選</h1>
+        <p className="text-sm text-gray-500 mt-1">依技術面與基本面條件篩選股票</p>
       </div>
 
       {/* Filter panel */}
       <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm space-y-5">
         {/* Market selector */}
         <div className="flex items-center gap-3">
-          <span className="text-sm font-medium text-gray-700">Market:</span>
+          <span className="text-sm font-medium text-gray-700">市場：</span>
           <div className="flex rounded-md border border-gray-300 overflow-hidden text-sm">
             {(['US', 'TW', 'ALL'] as Market[]).map((m) => (
               <button
@@ -68,7 +68,7 @@ export function ScreenerPage() {
 
         {/* Conditions */}
         <div>
-          <h3 className="text-sm font-semibold text-gray-700 mb-3">Conditions</h3>
+          <h3 className="text-sm font-semibold text-gray-700 mb-3">條件</h3>
           <ConditionList conditions={conditions} onChange={setConditions} />
         </div>
 
@@ -81,10 +81,10 @@ export function ScreenerPage() {
           {isLoading ? (
             <>
               <Spinner size="sm" className="border-white border-t-blue-300" />
-              Running...
+              執行中...
             </>
           ) : (
-            'Run Screen'
+            '執行篩選'
           )}
         </button>
       </div>
@@ -96,8 +96,8 @@ export function ScreenerPage() {
       {results !== null && !error && (
         <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
           <h2 className="text-sm font-semibold text-gray-700 mb-4">
-            Results{' '}
-            <span className="font-normal text-gray-400">({results.length} stocks)</span>
+            結果{' '}
+            <span className="font-normal text-gray-400">（{results.length} 檔）</span>
           </h2>
           <ResultsTable
             results={pagedResults}

@@ -38,32 +38,32 @@ export function BacktestResults({ result, config }: BacktestResultsProps) {
       {/* Summary metrics */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         <MetricCard
-          label="Total Return"
+          label="總報酬率"
           value={`${sign(result.totalReturn)}${pct(result.totalReturn)}`}
           positive={result.totalReturn >= 0}
         />
         <MetricCard
-          label="Annual Return"
+          label="年化報酬率"
           value={`${sign(result.annualizedReturn)}${pct(result.annualizedReturn)}`}
           positive={result.annualizedReturn >= 0}
         />
         <MetricCard
-          label="Max Drawdown"
+          label="最大回撤"
           value={`-${pct(result.maxDrawdown)}`}
           positive={false}
         />
         <MetricCard
-          label="Sharpe Ratio"
+          label="夏普比率"
           value={result.sharpeRatio.toFixed(2)}
           positive={result.sharpeRatio >= 1}
         />
         <MetricCard
-          label="Win Rate"
+          label="勝率"
           value={pct(result.winRate)}
           positive={result.winRate >= 0.5}
         />
         <MetricCard
-          label="Final Value"
+          label="最終價值"
           value={`$${result.finalValue.toLocaleString(undefined, { maximumFractionDigits: 0 })}`}
           neutral
         />
@@ -71,7 +71,7 @@ export function BacktestResults({ result, config }: BacktestResultsProps) {
 
       {/* Equity curve */}
       <div className="rounded-lg border border-gray-200 bg-white p-4">
-        <h3 className="text-sm font-semibold text-gray-700 mb-3">Equity Curve</h3>
+        <h3 className="text-sm font-semibold text-gray-700 mb-3">權益曲線</h3>
         <EquityCurveChart
           data={result.equityCurve}
           initialCapital={config.initialCapital}
@@ -81,7 +81,7 @@ export function BacktestResults({ result, config }: BacktestResultsProps) {
       {/* Trades table */}
       <div className="rounded-lg border border-gray-200 bg-white p-4">
         <h3 className="text-sm font-semibold text-gray-700 mb-3">
-          Trade History ({result.totalTrades} trades)
+          交易紀錄（{result.totalTrades} 筆）
         </h3>
         <TradesTable trades={result.trades} />
       </div>

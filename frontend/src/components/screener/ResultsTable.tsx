@@ -52,32 +52,32 @@ export function ResultsTable({ results, page, limit, total, onPageChange }: Resu
   return (
     <div>
       <div className="mb-2 text-sm text-gray-500">
-        {total} result{total !== 1 ? 's' : ''}
+        {total} 筆結果
       </div>
       <div className="overflow-x-auto rounded-lg border border-gray-200">
         <table className="min-w-full divide-y divide-gray-200 text-sm">
           <thead className="bg-gray-50">
             <tr>
               <th className={thClass} onClick={() => toggleSort('symbol')}>
-                Symbol <SortIcon col="symbol" />
+                代號 <SortIcon col="symbol" />
               </th>
               <th className={thClass} onClick={() => toggleSort('name')}>
-                Name <SortIcon col="name" />
+                名稱 <SortIcon col="name" />
               </th>
               <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-gray-500">
-                Market
+                市場
               </th>
               <th className={thClass} onClick={() => toggleSort('price')}>
-                Price <SortIcon col="price" />
+                股價 <SortIcon col="price" />
               </th>
               <th className={thClass} onClick={() => toggleSort('changePercent')}>
-                Change% <SortIcon col="changePercent" />
+                漲跌幅 <SortIcon col="changePercent" />
               </th>
               <th className={thClass} onClick={() => toggleSort('volume')}>
-                Volume <SortIcon col="volume" />
+                成交量 <SortIcon col="volume" />
               </th>
               <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-gray-500">
-                Industry
+                產業
               </th>
             </tr>
           </thead>
@@ -85,7 +85,7 @@ export function ResultsTable({ results, page, limit, total, onPageChange }: Resu
             {sorted.length === 0 ? (
               <tr>
                 <td colSpan={7} className="py-12 text-center text-gray-400">
-                  No results match your criteria
+                  無符合條件的結果
                 </td>
               </tr>
             ) : (
@@ -136,7 +136,7 @@ export function ResultsTable({ results, page, limit, total, onPageChange }: Resu
       {totalPages > 1 && (
         <div className="mt-4 flex items-center justify-between">
           <span className="text-sm text-gray-500">
-            Page {page} of {totalPages}
+            第 {page} 頁，共 {totalPages} 頁
           </span>
           <div className="flex gap-2">
             <button
@@ -144,14 +144,14 @@ export function ResultsTable({ results, page, limit, total, onPageChange }: Resu
               onClick={() => onPageChange(page - 1)}
               className="rounded-md border border-gray-300 px-3 py-1.5 text-sm disabled:opacity-40 hover:bg-gray-50 transition-colors"
             >
-              Previous
+              上一頁
             </button>
             <button
               disabled={page >= totalPages}
               onClick={() => onPageChange(page + 1)}
               className="rounded-md border border-gray-300 px-3 py-1.5 text-sm disabled:opacity-40 hover:bg-gray-50 transition-colors"
             >
-              Next
+              下一頁
             </button>
           </div>
         </div>

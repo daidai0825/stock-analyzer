@@ -43,7 +43,7 @@ export function App() {
             element={
               <div className="flex flex-col items-center justify-center py-24 text-center">
                 <h2 className="text-4xl font-bold text-gray-300 mb-3">404</h2>
-                <p className="text-gray-500">Page not found.</p>
+                <p className="text-gray-500">找不到頁面。</p>
               </div>
             }
           />

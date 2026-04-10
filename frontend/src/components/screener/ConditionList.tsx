@@ -30,7 +30,7 @@ export function ConditionList({ conditions, onChange }: ConditionListProps) {
   return (
     <div className="space-y-3">
       {conditions.length === 0 && (
-        <p className="text-sm text-gray-400 italic">No conditions added. Click "Add Condition" to start.</p>
+        <p className="text-sm text-gray-400 italic">尚未新增條件。點擊「新增條件」開始。</p>
       )}
       {conditions.map((c, i) => (
         <ConditionBuilder
@@ -45,7 +45,7 @@ export function ConditionList({ conditions, onChange }: ConditionListProps) {
         onClick={handleAdd}
         className="mt-2 inline-flex items-center gap-1.5 rounded-md border border-blue-500 px-3 py-1.5 text-sm font-medium text-blue-600 hover:bg-blue-50 transition-colors"
       >
-        + Add Condition
+        + 新增條件
       </button>
     </div>
   );
