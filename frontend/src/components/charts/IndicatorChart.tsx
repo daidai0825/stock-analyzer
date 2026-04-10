@@ -53,7 +53,7 @@ export function IndicatorChart({
   if (data.length === 0) {
     return (
       <div className="flex items-center justify-center text-gray-400 text-xs" style={{ height }}>
-        No indicator data
+        無指標資料
       </div>
     );
   }

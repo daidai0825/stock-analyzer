@@ -23,7 +23,7 @@ function MarketCard({
   return (
     <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-semibold text-gray-900">{market === 'US' ? 'US Market' : 'Taiwan Market'}</h3>
+        <h3 className="font-semibold text-gray-900">{market === 'US' ? '美股市場' : '台股市場'}</h3>
         <span
           className={`rounded-full px-2 py-0.5 text-xs font-medium ${
             market === 'US' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'
@@ -42,11 +42,11 @@ function MarketCard({
           <div className="grid grid-cols-2 gap-3 mb-4">
             <div className="text-center rounded-lg bg-green-50 py-2">
               <p className="text-lg font-bold text-green-600">{gainers}</p>
-              <p className="text-xs text-green-500">Gainers</p>
+              <p className="text-xs text-green-500">漲幅</p>
             </div>
             <div className="text-center rounded-lg bg-red-50 py-2">
               <p className="text-lg font-bold text-red-600">{losers}</p>
-              <p className="text-xs text-red-500">Losers</p>
+              <p className="text-xs text-red-500">跌幅</p>
             </div>
           </div>
           <ul className="space-y-1.5">
@@ -92,12 +92,12 @@ export function DashboardPage() {
   useEffect(() => {
     fetchStocks({ market: 'US', limit: 20 })
       .then((res) => setUsStocks(res.data))
-      .catch(() => setUsError('Failed to load US market data'))
+      .catch(() => setUsError('無法載入美股市場資料'))
       .finally(() => setUsLoading(false));
 
     fetchStocks({ market: 'TW', limit: 20 })
       .then((res) => setTwStocks(res.data))
-      .catch(() => setTwError('Failed to load Taiwan market data'))
+      .catch(() => setTwError('無法載入台股市場資料'))
       .finally(() => setTwLoading(false));
   }, []);
 
@@ -105,12 +105,12 @@ export function DashboardPage() {
     <div className="space-y-8">
       {/* Hero search */}
       <div className="rounded-xl bg-gradient-to-r from-blue-600 to-indigo-700 p-8 text-white">
-        <h1 className="text-2xl font-bold mb-1">Stock Analyzer</h1>
-        <p className="text-blue-100 mb-5 text-sm">Analyze US & Taiwan stocks with charts, screeners, and backtesting</p>
+        <h1 className="text-2xl font-bold mb-1">股票分析</h1>
+        <p className="text-blue-100 mb-5 text-sm">分析美股與台股 — 圖表、篩選器、回測一站搞定</p>
         <div className="flex gap-2 max-w-md">
           <input
             type="text"
-            placeholder="Quick search: AAPL, 2330..."
+            placeholder="快速搜尋：AAPL、2330..."
             className="flex-1 rounded-lg px-4 py-2.5 text-gray-900 text-sm focus:outline-none"
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
@@ -122,14 +122,14 @@ export function DashboardPage() {
           <button
             className="rounded-lg bg-white/20 px-4 py-2.5 text-sm font-semibold hover:bg-white/30 transition-colors"
           >
-            Search
+            搜尋
           </button>
         </div>
       </div>
 
       {/* Market overview */}
       <div>
-        <h2 className="text-lg font-bold text-gray-900 mb-4">Market Overview</h2>
+        <h2 className="text-lg font-bold text-gray-900 mb-4">市場概覽</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <MarketCard market="US" stocks={usStocks} isLoading={usLoading} error={usError} />
           <MarketCard market="TW" stocks={twStocks} isLoading={twLoading} error={twError} />
@@ -138,7 +138,7 @@ export function DashboardPage() {
 
       {/* Quick links */}
       <div>
-        <h2 className="text-lg font-bold text-gray-900 mb-4">Tools</h2>
+        <h2 className="text-lg font-bold text-gray-900 mb-4">工具</h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Link
             to="/screener"
@@ -149,8 +149,8 @@ export function DashboardPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 010 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h10a1 1 0 010 2H4a1 1 0 01-1-1zM3 16a1 1 0 011-1h4a1 1 0 010 2H4a1 1 0 01-1-1z" />
               </svg>
             </div>
-            <h3 className="font-semibold text-gray-900">Stock Screener</h3>
-            <p className="text-xs text-gray-500 mt-1">Filter stocks by technical & fundamental criteria</p>
+            <h3 className="font-semibold text-gray-900">股票篩選</h3>
+            <p className="text-xs text-gray-500 mt-1">依技術面與基本面條件篩選股票</p>
           </Link>
           <Link
             to="/backtest"
@@ -161,8 +161,8 @@ export function DashboardPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
               </svg>
             </div>
-            <h3 className="font-semibold text-gray-900">Backtester</h3>
-            <p className="text-xs text-gray-500 mt-1">Test trading strategies on historical data</p>
+            <h3 className="font-semibold text-gray-900">回測系統</h3>
+            <p className="text-xs text-gray-500 mt-1">以歷史數據測試交易策略</p>
           </Link>
           <Link
             to="/watchlists"
@@ -173,8 +173,8 @@ export function DashboardPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
               </svg>
             </div>
-            <h3 className="font-semibold text-gray-900">Watchlists</h3>
-            <p className="text-xs text-gray-500 mt-1">Track your favourite stocks</p>
+            <h3 className="font-semibold text-gray-900">觀察列表</h3>
+            <p className="text-xs text-gray-500 mt-1">追蹤你關注的股票</p>
           </Link>
         </div>
       </div>
@@ -182,18 +182,18 @@ export function DashboardPage() {
       {/* Watchlist preview */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold text-gray-900">Your Watchlists</h2>
+          <h2 className="text-lg font-bold text-gray-900">你的觀察列表</h2>
           <Link to="/watchlists" className="text-sm text-blue-600 hover:underline">
-            View all
+            查看全部
           </Link>
         </div>
         {watchlistsLoading ? (
           <div className="flex justify-center py-8"><Spinner /></div>
         ) : watchlists.length === 0 ? (
           <div className="rounded-xl border border-dashed border-gray-300 p-8 text-center text-gray-400 text-sm">
-            No watchlists yet.{' '}
+            尚無觀察列表。{' '}
             <Link to="/watchlists" className="text-blue-500 hover:underline">
-              Create one
+              建立一個
             </Link>
           </div>
         ) : (

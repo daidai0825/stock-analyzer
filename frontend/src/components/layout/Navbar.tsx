@@ -42,11 +42,11 @@ export function Navbar({ market, onMarketChange }: NavbarProps) {
   }
 
   const navLinks = [
-    { to: '/', label: 'Dashboard' },
-    { to: '/screener', label: 'Screener' },
-    { to: '/backtest', label: 'Backtest' },
-    { to: '/watchlists', label: 'Watchlists' },
-    { to: '/alerts', label: 'Alerts' },
+    { to: '/', label: '儀表板' },
+    { to: '/screener', label: '股票篩選' },
+    { to: '/backtest', label: '回測' },
+    { to: '/watchlists', label: '觀察列表' },
+    { to: '/alerts', label: '警報' },
   ];
 
   return (
@@ -68,7 +68,7 @@ export function Navbar({ market, onMarketChange }: NavbarProps) {
                 d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"
               />
             </svg>
-            <span className="hidden sm:block">Stock Analyzer</span>
+            <span className="hidden sm:block">股票分析</span>
           </Link>
 
           {/* Nav links */}
@@ -110,14 +110,14 @@ export function Navbar({ market, onMarketChange }: NavbarProps) {
               onClick={handleLogout}
               className="shrink-0 rounded-md border border-gray-600 px-3 py-1.5 text-xs font-semibold text-gray-300 hover:bg-gray-700 transition-colors"
             >
-              Logout
+              登出
             </button>
           ) : (
             <Link
               to="/login"
               className="shrink-0 rounded-md bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-blue-500 transition-colors"
             >
-              Login
+              登入
             </Link>
           )}
 
@@ -125,7 +125,7 @@ export function Navbar({ market, onMarketChange }: NavbarProps) {
           <div ref={searchRef} className="relative w-48 sm:w-64">
             <input
               type="text"
-              placeholder="Search symbol or name..."
+              placeholder="搜尋代號或名稱..."
               value={query}
               onChange={(e) => {
                 setQuery(e.target.value);
@@ -143,9 +143,9 @@ export function Navbar({ market, onMarketChange }: NavbarProps) {
             {showDropdown && (query.length > 0) && (
               <div className="absolute left-0 top-full mt-1 w-full rounded-md bg-white shadow-xl z-50 overflow-hidden">
                 {isLoading ? (
-                  <div className="px-4 py-3 text-sm text-gray-500">Searching...</div>
+                  <div className="px-4 py-3 text-sm text-gray-500">搜尋中...</div>
                 ) : results.length === 0 ? (
-                  <div className="px-4 py-3 text-sm text-gray-500">No results</div>
+                  <div className="px-4 py-3 text-sm text-gray-500">無結果</div>
                 ) : (
                   <ul>
                     {results.map((stock) => (

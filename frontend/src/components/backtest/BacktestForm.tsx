@@ -3,20 +3,20 @@ import { format, subYears } from 'date-fns';
 import type { BacktestConfig } from '../../types/stock';
 
 const STRATEGIES = [
-  { value: 'buy_and_hold', label: 'Buy & Hold' },
-  { value: 'sma_crossover', label: 'SMA Crossover' },
-  { value: 'rsi_oversold', label: 'RSI Oversold' },
+  { value: 'buy_and_hold', label: '買入持有' },
+  { value: 'sma_crossover', label: '均線交叉' },
+  { value: 'rsi_oversold', label: 'RSI 超賣' },
 ];
 
 const STRATEGY_PARAMS: Record<string, { key: string; label: string; default: number }[]> = {
   sma_crossover: [
-    { key: 'fast_period', label: 'Fast SMA Period', default: 20 },
-    { key: 'slow_period', label: 'Slow SMA Period', default: 50 },
+    { key: 'fast_period', label: '快均線週期', default: 20 },
+    { key: 'slow_period', label: '慢均線週期', default: 50 },
   ],
   rsi_oversold: [
-    { key: 'rsi_period', label: 'RSI Period', default: 14 },
-    { key: 'oversold_level', label: 'Oversold Level', default: 30 },
-    { key: 'overbought_level', label: 'Overbought Level', default: 70 },
+    { key: 'rsi_period', label: 'RSI 週期', default: 14 },
+    { key: 'oversold_level', label: '超賣水位', default: 30 },
+    { key: 'overbought_level', label: '超買水位', default: 70 },
   ],
 };
 
@@ -68,12 +68,12 @@ export function BacktestForm({ onSubmit, isLoading }: BacktestFormProps) {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Symbol */}
         <div>
-          <label className={labelClass}>Symbol</label>
+          <label className={labelClass}>股票代號</label>
           <input
             type="text"
             value={symbol}
             onChange={(e) => setSymbol(e.target.value)}
-            placeholder="e.g. AAPL, 2330"
+            placeholder="例如 AAPL、2330"
             required
             className={inputClass}
           />
@@ -81,7 +81,7 @@ export function BacktestForm({ onSubmit, isLoading }: BacktestFormProps) {
 
         {/* Strategy */}
         <div>
-          <label className={labelClass}>Strategy</label>
+          <label className={labelClass}>策略</label>
           <select
             value={strategy}
             onChange={(e) => { setStrategy(e.target.value); setParams({}); }}
@@ -97,7 +97,7 @@ export function BacktestForm({ onSubmit, isLoading }: BacktestFormProps) {
 
         {/* Start date */}
         <div>
-          <label className={labelClass}>Start Date</label>
+          <label className={labelClass}>開始日期</label>
           <input
             type="date"
             value={startDate}
@@ -109,7 +109,7 @@ export function BacktestForm({ onSubmit, isLoading }: BacktestFormProps) {
 
         {/* End date */}
         <div>
-          <label className={labelClass}>End Date</label>
+          <label className={labelClass}>結束日期</label>
           <input
             type="date"
             value={endDate}
@@ -121,7 +121,7 @@ export function BacktestForm({ onSubmit, isLoading }: BacktestFormProps) {
 
         {/* Initial capital */}
         <div>
-          <label className={labelClass}>Initial Capital ($)</label>
+          <label className={labelClass}>初始資金 ($)</label>
           <input
             type="number"
             value={initialCapital}
@@ -136,8 +136,8 @@ export function BacktestForm({ onSubmit, isLoading }: BacktestFormProps) {
         {/* Commission */}
         <div>
           <label className={labelClass}>
-            Commission Rate
-            <span className="ml-1 text-xs text-gray-400">(台股 0.1425%)</span>
+            手續費率
+            <span className="ml-1 text-xs text-gray-400">（台股 0.1425%）</span>
           </label>
           <input
             type="number"
@@ -153,8 +153,8 @@ export function BacktestForm({ onSubmit, isLoading }: BacktestFormProps) {
         {/* Tax */}
         <div>
           <label className={labelClass}>
-            Tax Rate (sell side)
-            <span className="ml-1 text-xs text-gray-400">(台股 0.3%)</span>
+            稅率（賣出）
+            <span className="ml-1 text-xs text-gray-400">（台股 0.3%）</span>
           </label>
           <input
             type="number"
@@ -171,7 +171,7 @@ export function BacktestForm({ onSubmit, isLoading }: BacktestFormProps) {
       {/* Strategy-specific params */}
       {strategyParamDefs.length > 0 && (
         <div>
-          <h4 className="text-sm font-semibold text-gray-700 mb-3">Strategy Parameters</h4>
+          <h4 className="text-sm font-semibold text-gray-700 mb-3">策略參數</h4>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {strategyParamDefs.map((def) => (
               <div key={def.key}>
@@ -194,7 +194,7 @@ export function BacktestForm({ onSubmit, isLoading }: BacktestFormProps) {
         disabled={isLoading}
         className="w-full rounded-md bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-60 transition-colors"
       >
-        {isLoading ? 'Running backtest...' : 'Run Backtest'}
+        {isLoading ? '回測執行中...' : '執行回測'}
       </button>
     </form>
   );

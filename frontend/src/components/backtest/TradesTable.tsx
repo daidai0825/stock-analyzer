@@ -20,7 +20,7 @@ export function TradesTable({ trades }: TradesTableProps) {
         <table className="min-w-full divide-y divide-gray-200 text-sm">
           <thead className="bg-gray-50">
             <tr>
-              {['Date', 'Action', 'Price', 'Shares', 'Value'].map((h) => (
+              {['日期', '動作', '價格', '股數', '金額'].map((h) => (
                 <th
                   key={h}
                   className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
@@ -42,7 +42,7 @@ export function TradesTable({ trades }: TradesTableProps) {
                         : 'bg-red-100 text-red-700'
                     }`}
                   >
-                    {trade.action}
+                    {trade.action === 'BUY' ? '買入' : '賣出'}
                   </span>
                 </td>
                 <td className="px-4 py-2.5 font-mono text-gray-900">${trade.price.toFixed(2)}</td>
@@ -55,7 +55,7 @@ export function TradesTable({ trades }: TradesTableProps) {
             {slice.length === 0 && (
               <tr>
                 <td colSpan={5} className="py-8 text-center text-gray-400">
-                  No trades
+                  無交易紀錄
                 </td>
               </tr>
             )}
@@ -66,7 +66,7 @@ export function TradesTable({ trades }: TradesTableProps) {
       {totalPages > 1 && (
         <div className="mt-3 flex items-center justify-between">
           <span className="text-xs text-gray-500">
-            Showing {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, total)} of {total}
+            顯示 {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, total)}，共 {total} 筆
           </span>
           <div className="flex gap-2">
             <button
@@ -74,14 +74,14 @@ export function TradesTable({ trades }: TradesTableProps) {
               onClick={() => setPage((p) => p - 1)}
               className="rounded border border-gray-300 px-2.5 py-1 text-xs disabled:opacity-40 hover:bg-gray-50"
             >
-              Prev
+              上一頁
             </button>
             <button
               disabled={page >= totalPages}
               onClick={() => setPage((p) => p + 1)}
               className="rounded border border-gray-300 px-2.5 py-1 text-xs disabled:opacity-40 hover:bg-gray-50"
             >
-              Next
+              下一頁
             </button>
           </div>
         </div>

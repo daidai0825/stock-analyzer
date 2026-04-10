@@ -34,7 +34,7 @@ function CustomTooltip({ active, payload, label }: TooltipProps) {
   return (
     <div className="rounded-lg bg-gray-900 border border-gray-700 px-3 py-2 text-xs text-white shadow-lg">
       <p className="font-semibold mb-0.5">{label}</p>
-      <p>Value: <span className="text-blue-300">{formatCurrency(payload[0]?.value ?? 0)}</span></p>
+      <p>價值：<span className="text-blue-300">{formatCurrency(payload[0]?.value ?? 0)}</span></p>
     </div>
   );
 }
@@ -75,7 +75,7 @@ export function EquityCurveChart({ data, initialCapital, height = 280 }: EquityC
           y={initialCapital}
           stroke="#9ca3af"
           strokeDasharray="4 2"
-          label={{ value: 'Initial', fill: '#9ca3af', fontSize: 10, position: 'insideTopRight' }}
+          label={{ value: '初始', fill: '#9ca3af', fontSize: 10, position: 'insideTopRight' }}
         />
         <Area
           type="monotone"

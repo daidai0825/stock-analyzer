@@ -64,7 +64,7 @@ export function StockDetailPage() {
     setStockError(null);
     fetchStockDetail(symbol)
       .then(setStock)
-      .catch(() => setStockError('Failed to load stock details'));
+      .catch(() => setStockError('無法載入股票資料'));
   }, [symbol]);
 
   // Fetch valuation data
@@ -104,7 +104,7 @@ export function StockDetailPage() {
     <div className="space-y-6">
       {/* Breadcrumb */}
       <div className="text-sm text-gray-500">
-        <Link to="/" className="hover:text-gray-700">Home</Link>
+        <Link to="/" className="hover:text-gray-700">首頁</Link>
         <span className="mx-2">/</span>
         <span className="text-gray-900 font-medium">{displayStock.symbol}</span>
       </div>
@@ -165,7 +165,7 @@ export function StockDetailPage() {
 
           {/* Overlay toggles */}
           <div className="flex items-center gap-2 text-xs">
-            <span className="text-gray-400 font-medium">Overlay:</span>
+            <span className="text-gray-400 font-medium">疊加：</span>
             {[
               { key: 'sma20', label: 'SMA20', color: 'text-orange-500', active: showSMA20, toggle: () => setShowSMA20((v) => !v) },
               { key: 'sma50', label: 'SMA50', color: 'text-purple-500', active: showSMA50, toggle: () => setShowSMA50((v) => !v) },
@@ -182,7 +182,7 @@ export function StockDetailPage() {
                 {label}
               </button>
             ))}
-            <span className="text-gray-400 font-medium ml-2">Indicator:</span>
+            <span className="text-gray-400 font-medium ml-2">指標：</span>
             <button
               onClick={() => setShowRSI((v) => !v)}
               className={`rounded-full px-2.5 py-1 font-semibold border transition-colors ${
@@ -214,8 +214,8 @@ export function StockDetailPage() {
               height={130}
               domain={[0, 100]}
               referenceLines={[
-                { value: 70, color: '#ef4444', label: 'OB 70' },
-                { value: 30, color: '#22c55e', label: 'OS 30' },
+                { value: 70, color: '#ef4444', label: '超買 70' },
+                { value: 30, color: '#22c55e', label: '超賣 30' },
               ]}
             />
           </div>
@@ -225,31 +225,31 @@ export function StockDetailPage() {
       {/* Valuation */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-          <h2 className="text-sm font-semibold text-gray-700 mb-3">Valuation</h2>
-          <ValuationRow label="P/E Ratio" value={valuation.peRatio != null ? valuation.peRatio.toFixed(1) : null} />
-          <ValuationRow label="P/B Ratio" value={valuation.pbRatio != null ? valuation.pbRatio.toFixed(2) : null} />
-          <ValuationRow label="P/S Ratio" value={valuation.psRatio != null ? valuation.psRatio.toFixed(2) : null} />
-          <ValuationRow label="EPS" value={valuation.eps != null ? `$${valuation.eps.toFixed(2)}` : null} />
+          <h2 className="text-sm font-semibold text-gray-700 mb-3">估值</h2>
+          <ValuationRow label="本益比" value={valuation.peRatio != null ? valuation.peRatio.toFixed(1) : null} />
+          <ValuationRow label="股價淨值比" value={valuation.pbRatio != null ? valuation.pbRatio.toFixed(2) : null} />
+          <ValuationRow label="股價營收比" value={valuation.psRatio != null ? valuation.psRatio.toFixed(2) : null} />
+          <ValuationRow label="每股盈餘" value={valuation.eps != null ? `$${valuation.eps.toFixed(2)}` : null} />
         </div>
         <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-          <h2 className="text-sm font-semibold text-gray-700 mb-3">Market Data</h2>
+          <h2 className="text-sm font-semibold text-gray-700 mb-3">市場資料</h2>
           <ValuationRow
-            label="Market Cap"
+            label="市值"
             value={formatMarketCap(valuation.marketCap)}
           />
           <ValuationRow
-            label="Dividend Yield"
+            label="股息殖利率"
             value={valuation.dividendYield != null ? `${valuation.dividendYield.toFixed(2)}%` : null}
           />
           <ValuationRow
-            label="Volume (latest)"
+            label="成交量（最新）"
             value={
               prices.length > 0
                 ? prices[prices.length - 1].volume.toLocaleString()
                 : '—'
             }
           />
-          <ValuationRow label="Exchange" value={displayStock.market === 'US' ? 'NASDAQ / NYSE' : 'TWSE / TPEx'} />
+          <ValuationRow label="交易所" value={displayStock.market === 'US' ? 'NASDAQ / NYSE' : 'TWSE / TPEx'} />
         </div>
       </div>
     </div>

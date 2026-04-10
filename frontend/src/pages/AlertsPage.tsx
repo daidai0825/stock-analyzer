@@ -13,12 +13,12 @@ import type { Alert, AlertType } from '../types/stock';
 // ---------------------------------------------------------------------------
 
 const ALERT_TYPES: { value: AlertType; label: string }[] = [
-  { value: 'price_above', label: 'Price Above' },
-  { value: 'price_below', label: 'Price Below' },
-  { value: 'rsi_above', label: 'RSI Above' },
-  { value: 'rsi_below', label: 'RSI Below' },
-  { value: 'sma_cross', label: 'SMA Cross (Golden Cross)' },
-  { value: 'volume_above', label: 'Volume Above' },
+  { value: 'price_above', label: '股價高於' },
+  { value: 'price_below', label: '股價低於' },
+  { value: 'rsi_above', label: 'RSI 高於' },
+  { value: 'rsi_below', label: 'RSI 低於' },
+  { value: 'sma_cross', label: '均線交叉（黃金交叉）' },
+  { value: 'volume_above', label: '成交量高於' },
 ];
 
 /** Human-readable description of the primary condition key per alert type. */
@@ -26,14 +26,14 @@ function conditionLabel(alertType: AlertType): string {
   switch (alertType) {
     case 'price_above':
     case 'price_below':
-      return 'Target Price';
+      return '目標價格';
     case 'rsi_above':
     case 'rsi_below':
-      return 'RSI Threshold';
+      return 'RSI 門檻';
     case 'volume_above':
-      return 'Volume Threshold';
+      return '成交量門檻';
     case 'sma_cross':
-      return 'Fast / Slow SMA Periods';
+      return '快/慢均線週期';
   }
 }
 
@@ -89,7 +89,7 @@ function AlertCard({ alert, onToggle, onDelete, onCheck, checkResult, isChecking
           </span>
           {alert.triggered_at && (
             <span className="ml-2 rounded-full bg-yellow-200 px-2 py-0.5 text-xs font-medium text-yellow-800">
-              Triggered
+              已觸發
             </span>
           )}
         </div>
@@ -102,9 +102,9 @@ function AlertCard({ alert, onToggle, onDelete, onCheck, checkResult, isChecking
               ? 'bg-green-100 text-green-700 hover:bg-green-200'
               : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
           }`}
-          title={alert.is_active ? 'Click to deactivate' : 'Click to activate'}
+          title={alert.is_active ? '點擊停用' : '點擊啟用'}
         >
-          {alert.is_active ? 'Active' : 'Inactive'}
+          {alert.is_active ? '啟用中' : '已停用'}
         </button>
       </div>
 
@@ -114,7 +114,7 @@ function AlertCard({ alert, onToggle, onDelete, onCheck, checkResult, isChecking
       {/* Triggered info */}
       {alert.triggered_at && (
         <p className="mt-1 text-xs text-yellow-700">
-          Fired: {new Date(alert.triggered_at).toLocaleString()}
+          觸發時間：{new Date(alert.triggered_at).toLocaleString()}
         </p>
       )}
 
@@ -127,8 +127,7 @@ function AlertCard({ alert, onToggle, onDelete, onCheck, checkResult, isChecking
               : 'bg-gray-100 text-gray-600'
           }`}
         >
-          {checkResult.triggered ? 'Would trigger now' : 'Not triggering now'} — current
-          value: {checkResult.current_value.toFixed(4)}
+          {checkResult.triggered ? '目前會觸發' : '目前未觸發'} — 當前數值：{checkResult.current_value.toFixed(4)}
         </div>
       )}
 
@@ -139,13 +138,13 @@ function AlertCard({ alert, onToggle, onDelete, onCheck, checkResult, isChecking
           disabled={isChecking}
           className="rounded-md bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700 hover:bg-blue-100 disabled:opacity-40 transition-colors"
         >
-          {isChecking ? 'Checking…' : 'Check Now'}
+          {isChecking ? '檢查中…' : '立即檢查'}
         </button>
         <button
           onClick={() => onDelete(alert.id)}
           className="rounded-md bg-red-50 px-3 py-1 text-xs font-semibold text-red-600 hover:bg-red-100 transition-colors"
         >
-          Delete
+          刪除
         </button>
       </div>
     </div>
@@ -190,7 +189,7 @@ function CreateAlertForm({ onCreated, onCancel }: CreateAlertFormProps) {
     e.preventDefault();
     setError(null);
     if (!symbol.trim()) {
-      setError('Symbol is required.');
+      setError('請輸入股票代號。');
       return;
     }
     setSubmitting(true);
@@ -202,7 +201,7 @@ function CreateAlertForm({ onCreated, onCancel }: CreateAlertFormProps) {
       });
       onCreated(alert);
     } catch {
-      setError('Failed to create alert. Please check your inputs.');
+      setError('建立警報失敗，請檢查輸入內容。');
     } finally {
       setSubmitting(false);
     }
@@ -217,7 +216,7 @@ function CreateAlertForm({ onCreated, onCancel }: CreateAlertFormProps) {
       onSubmit={handleSubmit}
       className="rounded-xl border border-blue-200 bg-blue-50 p-5 space-y-4"
     >
-      <h3 className="font-semibold text-gray-800 text-sm">New Alert</h3>
+      <h3 className="font-semibold text-gray-800 text-sm">新增警報</h3>
 
       {error && (
         <p className="rounded-md bg-red-100 px-3 py-2 text-xs text-red-700">{error}</p>
@@ -226,12 +225,12 @@ function CreateAlertForm({ onCreated, onCancel }: CreateAlertFormProps) {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {/* Symbol */}
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1">Symbol</label>
+          <label className="block text-xs font-medium text-gray-600 mb-1">股票代號</label>
           <input
             type="text"
             value={symbol}
             onChange={(e) => setSymbol(e.target.value)}
-            placeholder="e.g. AAPL or 2330"
+            placeholder="例如 AAPL 或 2330"
             className="w-full rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
@@ -239,7 +238,7 @@ function CreateAlertForm({ onCreated, onCancel }: CreateAlertFormProps) {
 
         {/* Alert type */}
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1">Alert Type</label>
+          <label className="block text-xs font-medium text-gray-600 mb-1">警報類型</label>
           <select
             value={alertType}
             onChange={(e) => setAlertType(e.target.value as AlertType)}
@@ -264,7 +263,7 @@ function CreateAlertForm({ onCreated, onCancel }: CreateAlertFormProps) {
               step="any"
               value={primaryValue}
               onChange={(e) => setPrimaryValue(e.target.value)}
-              placeholder="Enter value"
+              placeholder="輸入數值"
               className="w-full rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
@@ -274,7 +273,7 @@ function CreateAlertForm({ onCreated, onCancel }: CreateAlertFormProps) {
         {/* RSI period */}
         {showPeriodField && (
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">RSI Period</label>
+            <label className="block text-xs font-medium text-gray-600 mb-1">RSI 週期</label>
             <input
               type="number"
               min={2}
@@ -291,7 +290,7 @@ function CreateAlertForm({ onCreated, onCancel }: CreateAlertFormProps) {
           <>
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">
-                Fast SMA Period
+                快均線週期
               </label>
               <input
                 type="number"
@@ -303,7 +302,7 @@ function CreateAlertForm({ onCreated, onCancel }: CreateAlertFormProps) {
             </div>
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">
-                Slow SMA Period
+                慢均線週期
               </label>
               <input
                 type="number"
@@ -323,14 +322,14 @@ function CreateAlertForm({ onCreated, onCancel }: CreateAlertFormProps) {
           disabled={submitting}
           className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-40 transition-colors"
         >
-          {submitting ? 'Creating…' : 'Create Alert'}
+          {submitting ? '建立中…' : '建立警報'}
         </button>
         <button
           type="button"
           onClick={onCancel}
           className="text-sm text-gray-500 hover:text-gray-700"
         >
-          Cancel
+          取消
         </button>
       </div>
     </form>
@@ -361,7 +360,7 @@ export function AlertsPage() {
       setAlerts(resp.data);
       setTotal(resp.meta?.total ?? resp.data.length);
     } catch {
-      setError('Failed to load alerts.');
+      setError('無法載入警報。');
     } finally {
       setIsLoading(false);
     }
@@ -377,7 +376,7 @@ export function AlertsPage() {
       const updated = await updateAlert(id, { is_active: active });
       setAlerts((prev) => prev.map((a) => (a.id === id ? updated : a)));
     } catch {
-      setError('Failed to update alert.');
+      setError('更新警報失敗。');
     }
   }
 
@@ -387,7 +386,7 @@ export function AlertsPage() {
       setAlerts((prev) => prev.filter((a) => a.id !== id));
       setTotal((t) => t - 1);
     } catch {
-      setError('Failed to delete alert.');
+      setError('刪除警報失敗。');
     }
   }
 
@@ -418,16 +417,16 @@ export function AlertsPage() {
       {/* Page header */}
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Alerts</h1>
+          <h1 className="text-2xl font-bold text-gray-900">警報</h1>
           <p className="text-sm text-gray-500 mt-1">
-            {total} alert{total !== 1 ? 's' : ''} — checked every 15 minutes
+            {total} 個警報 — 每 15 分鐘檢查一次
           </p>
         </div>
         <button
-          onClick={() => setShowCreate((v) => !v)}
+          onClick={() => setShowCreate(true)}
           className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition-colors"
         >
-          + New Alert
+          + 新增警報
         </button>
       </div>
 
@@ -441,7 +440,7 @@ export function AlertsPage() {
 
       {/* Filter bar */}
       <div className="flex items-center gap-2">
-        <span className="text-xs font-medium text-gray-500">Filter:</span>
+        <span className="text-xs font-medium text-gray-500">篩選：</span>
         {([undefined, true, false] as const).map((val) => (
           <button
             key={String(val)}
@@ -452,7 +451,7 @@ export function AlertsPage() {
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
-            {val === undefined ? 'All' : val ? 'Active' : 'Inactive'}
+            {val === undefined ? '全部' : val ? '啟用中' : '已停用'}
           </button>
         ))}
       </div>
@@ -465,11 +464,11 @@ export function AlertsPage() {
       {/* Content */}
       {isLoading ? (
         <div className="flex items-center justify-center py-20 text-gray-400 text-sm">
-          Loading alerts…
+          載入警報中…
         </div>
       ) : alerts.length === 0 ? (
         <div className="rounded-xl border border-dashed border-gray-300 p-12 text-center">
-          <p className="text-gray-400 text-sm">No alerts yet. Create one to get started.</p>
+          <p className="text-gray-400 text-sm">尚無警報，建立一個開始使用。</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

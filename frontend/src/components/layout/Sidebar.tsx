@@ -28,7 +28,7 @@ export function Sidebar() {
         {recent.length > 0 && (
           <div>
             <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">
-              Recent
+              最近瀏覽
             </h3>
             <ul className="space-y-1">
               {recent.map((symbol) => (
@@ -48,7 +48,7 @@ export function Sidebar() {
         {/* Watchlists */}
         <div>
           <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">
-            Watchlists
+            觀察列表
           </h3>
           {isLoading ? (
             <div className="space-y-1">

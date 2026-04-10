@@ -1,17 +1,17 @@
 import type { ScreenerCondition } from '../../types/stock';
 
 export const INDICATOR_OPTIONS = [
-  { value: 'price', label: 'Price' },
-  { value: 'volume', label: 'Volume' },
+  { value: 'price', label: '股價' },
+  { value: 'volume', label: '成交量' },
   { value: 'rsi', label: 'RSI (14)' },
   { value: 'sma_20', label: 'SMA 20' },
   { value: 'sma_50', label: 'SMA 50' },
   { value: 'sma_200', label: 'SMA 200' },
-  { value: 'pe_ratio', label: 'P/E Ratio' },
-  { value: 'pb_ratio', label: 'P/B Ratio' },
-  { value: 'market_cap', label: 'Market Cap' },
-  { value: 'dividend_yield', label: 'Dividend Yield (%)' },
-  { value: 'change_percent', label: 'Change (%)' },
+  { value: 'pe_ratio', label: '本益比' },
+  { value: 'pb_ratio', label: '股價淨值比' },
+  { value: 'market_cap', label: '市值' },
+  { value: 'dividend_yield', label: '股息殖利率 (%)' },
+  { value: 'change_percent', label: '漲跌幅 (%)' },
 ];
 
 export const OPERATOR_OPTIONS: { value: ScreenerCondition['operator']; label: string }[] = [
@@ -70,7 +70,7 @@ export function ConditionBuilder({ condition, index, onChange, onRemove }: Condi
         type="number"
         value={String(condition.value)}
         onChange={(e) => update({ value: e.target.value === '' ? '' : Number(e.target.value) })}
-        placeholder="Value"
+        placeholder="數值"
         className="rounded-md border border-gray-300 px-2 py-1.5 text-sm w-28 focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
 
@@ -78,9 +78,9 @@ export function ConditionBuilder({ condition, index, onChange, onRemove }: Condi
       <button
         onClick={() => onRemove(index)}
         className="rounded-md px-2 py-1.5 text-sm text-red-500 hover:bg-red-50 transition-colors"
-        title="Remove condition"
+        title="移除條件"
       >
-        Remove
+        移除
       </button>
     </div>
   );
