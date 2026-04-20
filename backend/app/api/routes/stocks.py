@@ -16,7 +16,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import get_analyzer, get_cache, get_fetcher, get_valuation
+from app.api.deps import get_analyzer, get_cache, get_fetcher, get_scorer, get_valuation
 from app.core.cache import CacheManager
 from app.db.session import get_db
 from app.models.stock import Stock
@@ -28,11 +28,15 @@ from app.schemas.stock import (
     StockIndicatorsResponse,
     StockListResponse,
     StockResponse,
+    StockScoreDetailResponse,
+    StockScoreResponse,
+    StockSignal,
     StockValuationResponse,
     ValuationResponse,
 )
 from app.schemas.common import MetaResponse
 from app.services.data_fetcher import StockDataFetcher
+from app.services.stock_scorer import StockScorer
 from app.services.technical_analysis import TechnicalAnalyzer
 from app.services.valuation import ValuationAnalyzer
 
@@ -341,3 +345,29 @@ async def get_stock_valuation(
     metrics = await valuation_svc.get_valuation(symbol_upper)
 
     return StockValuationResponse(data=ValuationResponse(**metrics))
+
+
+@router.get("/{symbol}/score", response_model=StockScoreDetailResponse)
+async def get_stock_score(
+    symbol: str,
+    scorer: StockScorer = Depends(get_scorer),
+) -> StockScoreDetailResponse:
+    """Return composite quality score for a stock.
+
+    Aggregates valuation, technical, and fundamental analyses into a single
+    score and grade.  The ``signals`` list provides human-readable
+    positive/negative/neutral observations that drove the score.
+    """
+    symbol_upper = symbol.upper()
+    result = await scorer.score(symbol_upper)
+
+    return StockScoreDetailResponse(
+        data=StockScoreResponse(
+            overall_score=result.overall_score,
+            valuation_score=result.valuation_score,
+            technical_score=result.technical_score,
+            fundamental_score=result.fundamental_score,
+            grade=result.grade,
+            signals=[StockSignal(**s) for s in result.signals],
+        )
+    )

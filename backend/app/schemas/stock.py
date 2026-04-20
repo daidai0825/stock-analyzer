@@ -37,8 +37,13 @@ class IndicatorPointResponse(BaseModel):
 
 
 class ValuationResponse(BaseModel):
-    """Fundamental valuation metrics for a stock."""
+    """Fundamental valuation metrics for a stock.
 
+    All fields default to ``None`` when the data source does not provide them
+    (e.g. Taiwan stocks for US-only fields).
+    """
+
+    # Core valuation
     pe_ratio: float | None = None
     pb_ratio: float | None = None
     ps_ratio: float | None = None
@@ -47,6 +52,50 @@ class ValuationResponse(BaseModel):
     eps: float | None = None
     revenue: float | None = None
     profit_margin: float | None = None
+
+    # 風險指標
+    beta: float | None = None
+    fifty_two_week_high: float | None = None
+    fifty_two_week_low: float | None = None
+
+    # 財務健康
+    debt_to_equity: float | None = None
+    current_ratio: float | None = None
+    quick_ratio: float | None = None
+
+    # 獲利能力
+    roe: float | None = None
+    roa: float | None = None
+    operating_margin: float | None = None
+    gross_margin: float | None = None
+    free_cash_flow: float | None = None
+
+    # 成長指標
+    revenue_growth: float | None = None
+    earnings_growth: float | None = None
+
+    # 進階估值
+    peg_ratio: float | None = None
+    ev_to_ebitda: float | None = None
+    forward_pe: float | None = None
+
+    # 分析師
+    target_mean_price: float | None = None
+    recommendation_key: str | None = None
+    number_of_analysts: float | None = None
+
+    # 持股結構
+    insider_holding: float | None = None
+    institutional_holding: float | None = None
+
+    # 做空資料
+    short_ratio: float | None = None
+    short_percent_of_float: float | None = None
+
+    # 股息詳情
+    payout_ratio: float | None = None
+    dividend_rate: float | None = None
+    five_year_avg_dividend_yield: float | None = None
 
 
 class StockListResponse(BaseModel):
@@ -84,3 +133,27 @@ class StockValuationResponse(BaseModel):
     """Valuation metrics envelope."""
 
     data: ValuationResponse
+
+
+class StockSignal(BaseModel):
+    """A single qualitative signal from the scoring engine."""
+
+    type: str  # "positive" | "negative" | "neutral"
+    message: str
+
+
+class StockScoreResponse(BaseModel):
+    """Composite quality score for a stock."""
+
+    overall_score: int
+    valuation_score: float
+    technical_score: float
+    fundamental_score: float
+    grade: str
+    signals: list[StockSignal]
+
+
+class StockScoreDetailResponse(BaseModel):
+    """Stock score envelope."""
+
+    data: StockScoreResponse

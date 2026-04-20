@@ -79,6 +79,7 @@ class ValuationAnalyzer:
         info: dict = ticker.info or {}
 
         return {
+            # Core valuation
             "pe_ratio": _safe_float(info.get("trailingPE") or info.get("forwardPE")),
             "pb_ratio": _safe_float(info.get("priceToBook")),
             "ps_ratio": _safe_float(info.get("priceToSalesTrailing12Months")),
@@ -87,6 +88,43 @@ class ValuationAnalyzer:
             "eps": _safe_float(info.get("trailingEps") or info.get("forwardEps")),
             "revenue": _safe_float(info.get("totalRevenue")),
             "profit_margin": _safe_float(info.get("profitMargins")),
+            # 風險指標
+            "beta": _safe_float(info.get("beta")),
+            "fifty_two_week_high": _safe_float(info.get("fiftyTwoWeekHigh")),
+            "fifty_two_week_low": _safe_float(info.get("fiftyTwoWeekLow")),
+            # 財務健康
+            "debt_to_equity": _safe_float(info.get("debtToEquity")),
+            "current_ratio": _safe_float(info.get("currentRatio")),
+            "quick_ratio": _safe_float(info.get("quickRatio")),
+            # 獲利能力
+            "roe": _safe_float(info.get("returnOnEquity")),
+            "roa": _safe_float(info.get("returnOnAssets")),
+            "operating_margin": _safe_float(info.get("operatingMargins")),
+            "gross_margin": _safe_float(info.get("grossMargins")),
+            "free_cash_flow": _safe_float(info.get("freeCashflow")),
+            # 成長指標
+            "revenue_growth": _safe_float(info.get("revenueGrowth")),
+            "earnings_growth": _safe_float(info.get("earningsGrowth")),
+            # 進階估值
+            "peg_ratio": _safe_float(info.get("pegRatio")),
+            "ev_to_ebitda": _safe_float(info.get("enterpriseToEbitda")),
+            "forward_pe": _safe_float(info.get("forwardPE")),
+            # 分析師
+            "target_mean_price": _safe_float(info.get("targetMeanPrice")),
+            "recommendation_key": info.get("recommendationKey"),
+            "number_of_analysts": _safe_float(info.get("numberOfAnalystOpinions")),
+            # 持股結構
+            "insider_holding": _safe_float(info.get("heldPercentInsiders")),
+            "institutional_holding": _safe_float(info.get("heldPercentInstitutions")),
+            # 做空資料
+            "short_ratio": _safe_float(info.get("shortRatio")),
+            "short_percent_of_float": _safe_float(info.get("shortPercentOfFloat")),
+            # 股息詳情
+            "payout_ratio": _safe_float(info.get("payoutRatio")),
+            "dividend_rate": _safe_float(info.get("dividendRate")),
+            "five_year_avg_dividend_yield": _safe_float(
+                info.get("fiveYearAvgDividendYield")
+            ),
         }
 
     # ------------------------------------------------------------------
@@ -166,15 +204,101 @@ class ValuationAnalyzer:
         if net_income_k is not None and revenue_k and revenue_k != 0:
             profit_margin = net_income_k / revenue_k
 
+        # Use yfinance (via {bare}.TW) to supplement metrics that FinMind
+        # does not provide.  yfinance covers TW stocks with the .TW suffix.
+        yf_symbol = self.fetcher._tw_yf_symbol(symbol)
+        yf_data = await asyncio.to_thread(self._get_yf_supplement_sync, yf_symbol)
+
         return {
-            "pe_ratio": pe_ratio,
-            "pb_ratio": pb_ratio,
-            "ps_ratio": None,  # not directly available from FinMind TaiwanStockPER
-            "dividend_yield": div_yield,
-            "market_cap": market_cap,
-            "eps": eps,
-            "revenue": revenue,
-            "profit_margin": profit_margin,
+            # Prefer FinMind for PE/PB (more accurate for TW), fallback to yfinance
+            "pe_ratio": pe_ratio or yf_data.get("pe_ratio"),
+            "pb_ratio": pb_ratio or yf_data.get("pb_ratio"),
+            "ps_ratio": yf_data.get("ps_ratio"),
+            "dividend_yield": div_yield or yf_data.get("dividend_yield"),
+            "market_cap": market_cap or yf_data.get("market_cap"),
+            "eps": eps or yf_data.get("eps"),
+            "revenue": revenue or yf_data.get("revenue"),
+            "profit_margin": profit_margin or yf_data.get("profit_margin"),
+            # 以下全部從 yfinance 取得
+            "beta": yf_data.get("beta"),
+            "fifty_two_week_high": yf_data.get("fifty_two_week_high"),
+            "fifty_two_week_low": yf_data.get("fifty_two_week_low"),
+            "debt_to_equity": yf_data.get("debt_to_equity"),
+            "current_ratio": yf_data.get("current_ratio"),
+            "quick_ratio": yf_data.get("quick_ratio"),
+            "roe": yf_data.get("roe"),
+            "roa": yf_data.get("roa"),
+            "operating_margin": yf_data.get("operating_margin"),
+            "gross_margin": yf_data.get("gross_margin"),
+            "free_cash_flow": yf_data.get("free_cash_flow"),
+            "revenue_growth": yf_data.get("revenue_growth"),
+            "earnings_growth": yf_data.get("earnings_growth"),
+            "peg_ratio": yf_data.get("peg_ratio"),
+            "ev_to_ebitda": yf_data.get("ev_to_ebitda"),
+            "forward_pe": yf_data.get("forward_pe"),
+            "target_mean_price": yf_data.get("target_mean_price"),
+            "recommendation_key": yf_data.get("recommendation_key"),
+            "number_of_analysts": yf_data.get("number_of_analysts"),
+            "insider_holding": yf_data.get("insider_holding"),
+            "institutional_holding": yf_data.get("institutional_holding"),
+            "short_ratio": yf_data.get("short_ratio"),
+            "short_percent_of_float": yf_data.get("short_percent_of_float"),
+            "payout_ratio": yf_data.get("payout_ratio"),
+            "dividend_rate": yf_data.get("dividend_rate"),
+            "five_year_avg_dividend_yield": yf_data.get("five_year_avg_dividend_yield"),
+        }
+
+    def _get_yf_supplement_sync(self, yf_symbol: str) -> dict:
+        """Fetch supplementary metrics from yfinance for a TW stock.
+
+        Uses the same field mapping as ``_get_us_valuation_sync`` but is
+        only called as a fallback for Taiwan stocks to fill gaps that
+        FinMind does not cover (ROE, ROA, beta, analyst data, etc.).
+        """
+        try:
+            ticker = yf.Ticker(yf_symbol)
+            info: dict = ticker.info or {}
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("yfinance supplement failed for %s: %s", yf_symbol, exc)
+            return {}
+
+        return {
+            "pe_ratio": _safe_float(info.get("trailingPE") or info.get("forwardPE")),
+            "pb_ratio": _safe_float(info.get("priceToBook")),
+            "ps_ratio": _safe_float(info.get("priceToSalesTrailing12Months")),
+            "dividend_yield": _safe_float(info.get("dividendYield")),
+            "market_cap": _safe_float(info.get("marketCap")),
+            "eps": _safe_float(info.get("trailingEps") or info.get("forwardEps")),
+            "revenue": _safe_float(info.get("totalRevenue")),
+            "profit_margin": _safe_float(info.get("profitMargins")),
+            "beta": _safe_float(info.get("beta")),
+            "fifty_two_week_high": _safe_float(info.get("fiftyTwoWeekHigh")),
+            "fifty_two_week_low": _safe_float(info.get("fiftyTwoWeekLow")),
+            "debt_to_equity": _safe_float(info.get("debtToEquity")),
+            "current_ratio": _safe_float(info.get("currentRatio")),
+            "quick_ratio": _safe_float(info.get("quickRatio")),
+            "roe": _safe_float(info.get("returnOnEquity")),
+            "roa": _safe_float(info.get("returnOnAssets")),
+            "operating_margin": _safe_float(info.get("operatingMargins")),
+            "gross_margin": _safe_float(info.get("grossMargins")),
+            "free_cash_flow": _safe_float(info.get("freeCashflow")),
+            "revenue_growth": _safe_float(info.get("revenueGrowth")),
+            "earnings_growth": _safe_float(info.get("earningsGrowth")),
+            "peg_ratio": _safe_float(info.get("pegRatio")),
+            "ev_to_ebitda": _safe_float(info.get("enterpriseToEbitda")),
+            "forward_pe": _safe_float(info.get("forwardPE")),
+            "target_mean_price": _safe_float(info.get("targetMeanPrice")),
+            "recommendation_key": info.get("recommendationKey"),
+            "number_of_analysts": _safe_float(info.get("numberOfAnalystOpinions")),
+            "insider_holding": _safe_float(info.get("heldPercentInsiders")),
+            "institutional_holding": _safe_float(info.get("heldPercentInstitutions")),
+            "short_ratio": _safe_float(info.get("shortRatio")),
+            "short_percent_of_float": _safe_float(info.get("shortPercentOfFloat")),
+            "payout_ratio": _safe_float(info.get("payoutRatio")),
+            "dividend_rate": _safe_float(info.get("dividendRate")),
+            "five_year_avg_dividend_yield": _safe_float(
+                info.get("fiveYearAvgDividendYield")
+            ),
         }
 
     async def _finmind_latest(self, bare_symbol: str, dataset: str) -> dict:
@@ -238,4 +362,39 @@ class ValuationAnalyzer:
             "eps": None,
             "revenue": None,
             "profit_margin": None,
+            # 風險指標
+            "beta": None,
+            "fifty_two_week_high": None,
+            "fifty_two_week_low": None,
+            # 財務健康
+            "debt_to_equity": None,
+            "current_ratio": None,
+            "quick_ratio": None,
+            # 獲利能力
+            "roe": None,
+            "roa": None,
+            "operating_margin": None,
+            "gross_margin": None,
+            "free_cash_flow": None,
+            # 成長指標
+            "revenue_growth": None,
+            "earnings_growth": None,
+            # 進階估值
+            "peg_ratio": None,
+            "ev_to_ebitda": None,
+            "forward_pe": None,
+            # 分析師
+            "target_mean_price": None,
+            "recommendation_key": None,
+            "number_of_analysts": None,
+            # 持股結構
+            "insider_holding": None,
+            "institutional_holding": None,
+            # 做空資料
+            "short_ratio": None,
+            "short_percent_of_float": None,
+            # 股息詳情
+            "payout_ratio": None,
+            "dividend_rate": None,
+            "five_year_avg_dividend_yield": None,
         }
