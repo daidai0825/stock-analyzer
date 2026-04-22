@@ -9,6 +9,7 @@ import type {
   PricePoint,
   ScreenerCondition,
   Stock,
+  StockScore,
   ValuationData,
   Watchlist,
 } from '../types/stock';
@@ -78,6 +79,47 @@ export async function fetchStockValuation(symbol: string): Promise<ValuationData
     dividendYield: (raw.dividend_yield as number) ?? null,
     marketCap: (raw.market_cap as number) ?? null,
     eps: (raw.eps as number) ?? null,
+    revenue: (raw.revenue as number) ?? null,
+    profitMargin: (raw.profit_margin as number) ?? null,
+    beta: (raw.beta as number) ?? null,
+    fiftyTwoWeekHigh: (raw.fifty_two_week_high as number) ?? null,
+    fiftyTwoWeekLow: (raw.fifty_two_week_low as number) ?? null,
+    debtToEquity: (raw.debt_to_equity as number) ?? null,
+    currentRatio: (raw.current_ratio as number) ?? null,
+    quickRatio: (raw.quick_ratio as number) ?? null,
+    roe: (raw.roe as number) ?? null,
+    roa: (raw.roa as number) ?? null,
+    operatingMargin: (raw.operating_margin as number) ?? null,
+    grossMargin: (raw.gross_margin as number) ?? null,
+    freeCashFlow: (raw.free_cash_flow as number) ?? null,
+    revenueGrowth: (raw.revenue_growth as number) ?? null,
+    earningsGrowth: (raw.earnings_growth as number) ?? null,
+    pegRatio: (raw.peg_ratio as number) ?? null,
+    evToEbitda: (raw.ev_to_ebitda as number) ?? null,
+    forwardPe: (raw.forward_pe as number) ?? null,
+    targetMeanPrice: (raw.target_mean_price as number) ?? null,
+    recommendationKey: (raw.recommendation_key as string) ?? null,
+    numberOfAnalysts: (raw.number_of_analysts as number) ?? null,
+    insiderHolding: (raw.insider_holding as number) ?? null,
+    institutionalHolding: (raw.institutional_holding as number) ?? null,
+    shortRatio: (raw.short_ratio as number) ?? null,
+    shortPercentOfFloat: (raw.short_percent_of_float as number) ?? null,
+    payoutRatio: (raw.payout_ratio as number) ?? null,
+    dividendRate: (raw.dividend_rate as number) ?? null,
+    fiveYearAvgDividendYield: (raw.five_year_avg_dividend_yield as number) ?? null,
+  };
+}
+
+export async function fetchStockScore(symbol: string): Promise<StockScore> {
+  const { data } = await api.get<ApiResponse<Record<string, unknown>>>(`/stocks/${symbol}/score`);
+  const raw = data.data;
+  return {
+    overallScore: raw.overall_score as number,
+    valuationScore: raw.valuation_score as number,
+    technicalScore: raw.technical_score as number,
+    fundamentalScore: raw.fundamental_score as number,
+    grade: raw.grade as string,
+    signals: raw.signals as StockScore['signals'],
   };
 }
 

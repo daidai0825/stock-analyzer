@@ -67,6 +67,61 @@ export interface ValuationData {
   dividendYield: number | null;
   marketCap: number | null;
   eps: number | null;
+  revenue: number | null;
+  profitMargin: number | null;
+
+  // 風險指標
+  beta: number | null;
+  fiftyTwoWeekHigh: number | null;
+  fiftyTwoWeekLow: number | null;
+
+  // 財務健康
+  debtToEquity: number | null;
+  currentRatio: number | null;
+  quickRatio: number | null;
+
+  // 獲利能力
+  roe: number | null;
+  roa: number | null;
+  operatingMargin: number | null;
+  grossMargin: number | null;
+  freeCashFlow: number | null;
+
+  // 成長
+  revenueGrowth: number | null;
+  earningsGrowth: number | null;
+
+  // 進階估值
+  pegRatio: number | null;
+  evToEbitda: number | null;
+  forwardPe: number | null;
+
+  // 分析師
+  targetMeanPrice: number | null;
+  recommendationKey: string | null;
+  numberOfAnalysts: number | null;
+
+  // 持股結構
+  insiderHolding: number | null;
+  institutionalHolding: number | null;
+
+  // 做空
+  shortRatio: number | null;
+  shortPercentOfFloat: number | null;
+
+  // 股息詳情
+  payoutRatio: number | null;
+  dividendRate: number | null;
+  fiveYearAvgDividendYield: number | null;
+}
+
+export interface StockScore {
+  overallScore: number;
+  valuationScore: number;
+  technicalScore: number;
+  fundamentalScore: number;
+  grade: string;
+  signals: { type: 'positive' | 'negative' | 'neutral'; message: string }[];
 }
 
 export interface ApiResponse<T> {

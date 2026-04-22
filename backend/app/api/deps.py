@@ -21,6 +21,7 @@ from app.services.alert_evaluator import AlertEvaluator
 from app.services.backtester import Backtester
 from app.services.data_fetcher import StockDataFetcher
 from app.services.screener import StockScreener
+from app.services.stock_scorer import StockScorer
 from app.services.technical_analysis import TechnicalAnalyzer
 from app.services.valuation import ValuationAnalyzer
 
@@ -71,6 +72,11 @@ def get_valuation() -> ValuationAnalyzer:
 def get_alert_evaluator() -> AlertEvaluator:
     """Return an AlertEvaluator wired to the shared analyzer and fetcher."""
     return AlertEvaluator(_fetcher, _analyzer)
+
+
+def get_scorer() -> StockScorer:
+    """Return a StockScorer instance."""
+    return StockScorer()
 
 
 # ---------------------------------------------------------------------------
